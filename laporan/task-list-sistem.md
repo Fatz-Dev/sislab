@@ -69,19 +69,19 @@ Sesuai dengan Bagian B dari _Activity Diagram_.
 
 ## 📦 TAHAP 4: Manajemen Inventaris Lanjutan (Akan Datang)
 
-Sesuai dengan `next_plan.md` dan Bagian C pada _Activity Diagram_.
+Sesuaikan dengan Bagian C pada _Activity Diagram_.
 
-- [ ] **Laporan Kerusakan & Kondisi Barang (Laboran)**:
-    - [ ] Laboran melakukan inspeksi inventaris berkala di kelasnya (berdasarkan SOP).
-    - [ ] Laboran mengirimkan formulir laporan kerusakan alat/barang ke Admin.
-- [ ] **Tindak Lanjut Admin**:
-    - [ ] Admin menerima laporan kerusakan dari Laboran.
-    - [ ] Admin mengubah status kelayakan barang (Rusak Ringan, Berat, Perlu Penggantian).
-- [ ] **Rekapitulasi Global Barang**:
-    - [ ] Halaman khusus Admin yang _men-list_ total "Semua Barang" di seluruh laboratorium Fisika dalam satu tampilan terpadu.
-- [ ] **Import / Export Data (Excel)**:
-    - [ ] Impor massal data barang dari berkas Excel (menggunakan _template_ yang telah disiapkan).
-    - [ ] Ekspor data barang ke Excel / PDF untuk rekapitulasi fisik.
+- [x] **Laporan Kerusakan & Kondisi Barang (Laboran)**:
+    - [x] Laboran melakukan inspeksi inventaris berkala di kelasnya (berdasarkan SOP).
+    - [x] Laboran mengirimkan formulir laporan kerusakan alat/barang ke Admin.
+- [x] **Tindak Lanjut Admin**:
+    - [x] Admin menerima laporan kerusakan dari Laboran.
+    - [x] Admin mengubah status kelayakan barang (Rusak Ringan, Berat, Perlu Penggantian).
+- [x] **Rekapitulasi Global Barang**:
+    - [x] Halaman khusus Admin yang _men-list_ total "Semua Barang" di seluruh laboratorium Fisika dalam satu tampilan terpadu.
+- [x] **Import / Export Data (Excel)**:
+    - [x] Impor massal data barang dari berkas Excel (menggunakan _template_ yang telah disiapkan).
+    - [x] Ekspor data barang ke Excel / PDF untuk rekapitulasi fisik.
 
 ---
 
@@ -92,6 +92,6 @@ Sesuai dengan Bagian D pada _Activity Diagram_.
 - [ ] **Dashboard Analytics Admin**:
     - [ ] Statistik aktivitas seluruh kelas (Jumlah mahasiswa aktif, kelas berjalan).
     - [ ] Statistik kesehatan Inventaris (Berapa % alat yang layak, berapa yang rusak).
-- [ ] **Cetak Laporan Keseluruhan**:
-    - [ ] Pembuatan Dokumen Cetak/PDF untuk rekapitulasi nilai per semester.
-    - [ ] Laporan akhir inventaris laboratorium sebagai bahan evaluasi tahunan.
+- [x] **Cetak Laporan Keseluruhan**:
+    - [x] Pembuatan Dokumen Cetak/PDF untuk rekapitulasi nilai per semester.
+    - [x] Laporan akhir inventaris laboratorium sebagai bahan evaluasi tahunan.

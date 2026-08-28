@@ -89,4 +89,38 @@ class AdminBarangController extends Controller
 
         return response()->json(['success' => false, 'message' => 'Tidak ada file yang diunggah.'], 400);
     }
+
+    /**
+     * Import Excel barang ke ruangan tertentu secara global.
+     */
+    public function importGlobal(Request $request)
+    {
+        $request->validate([
+            'ruangan_id' => 'required|exists:ruangans,id',
+            'file' => 'required|mimes:xlsx,xls|max:5120',
+        ]);
+
+        \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\BarangImport($request->ruangan_id), $request->file('file'));
+
+        return response()->json(['success' => true, 'message' => 'Data berhasil diimpor.']);
+    }
+
+    /**
+     * Download template import barang.
+     */
+    public function downloadTemplate()
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\BarangTemplateExport, 'Template_Import_Barang.xlsx');
+    }
+
+    /**
+     * Export data barang inventaris.
+     */
+    public function exportExcel(Request $request)
+    {
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\BarangExport($request->ruangan_id, $request->kategori_id), 
+            'Rekap_Barang_Inventaris.xlsx'
+        );
+    }
 }

@@ -80,6 +80,9 @@ Route::middleware('auth')->group(function () {
             // Manajemen Barang (Global Inventory)
             Route::prefix('barang')->name('barang.')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Admin\AdminBarangController::class, 'index'])->name('index');
+                Route::get('/export', [\App\Http\Controllers\Admin\AdminBarangController::class, 'exportExcel'])->name('export');
+                Route::get('/template-import', [\App\Http\Controllers\Admin\AdminBarangController::class, 'downloadTemplate'])->name('template-import');
+                Route::post('/import', [\App\Http\Controllers\Admin\AdminBarangController::class, 'importGlobal'])->name('import');
                 Route::get('/{id}', [\App\Http\Controllers\Admin\AdminBarangController::class, 'show'])->name('show');
                 Route::post('/{id}/upload-foto', [\App\Http\Controllers\Admin\AdminBarangController::class, 'uploadFoto'])->name('upload-foto');
             });
@@ -111,6 +114,19 @@ Route::middleware('auth')->group(function () {
             // Pengaturan
             Route::get('/settings', [\App\Http\Controllers\Admin\AdminSettingController::class, 'index'])->name('settings.index');
             Route::post('/settings/pengumuman', [\App\Http\Controllers\Admin\AdminSettingController::class, 'storePengumuman'])->name('settings.pengumuman.store');
+
+            // Laporan Kerusakan dari Laboran
+            Route::prefix('laporan-laboran')->name('laporan-laboran.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\AdminLaporanLaboranController::class, 'index'])->name('index');
+                Route::patch('/{id}/review', [\App\Http\Controllers\Admin\AdminLaporanLaboranController::class, 'review'])->name('review');
+            });
+
+            // Cetak Laporan Keseluruhan (Tahap 5)
+            Route::prefix('laporan')->name('laporan.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'index'])->name('index');
+                Route::get('/cetak-nilai', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakNilai'])->name('cetak-nilai');
+                Route::get('/cetak-inventaris', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakInventaris'])->name('cetak-inventaris');
+            });
         });
 
     // ── Dosen ────────────────────────────────────────────────
@@ -143,10 +159,29 @@ Route::middleware('auth')->group(function () {
             Route::get('/kelas', [\App\Http\Controllers\Laboran\LaboranKelasController::class, 'index'])->name('kelas.index');
             Route::get('/kelas/{id}', [\App\Http\Controllers\Laboran\LaboranKelasController::class, 'show'])->name('kelas.show');
 
+            // Barang / Data Lab Laboran (Read Only)
+            Route::prefix('barang')->name('barang.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Laboran\LaboranBarangController::class, 'index'])->name('index');
+            });
+
+            Route::prefix('ruangan')->name('ruangan.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Laboran\LaboranRuanganController::class, 'index'])->name('index');
+                Route::post('/', [\App\Http\Controllers\Laboran\LaboranRuanganController::class, 'store'])->name('store');
+            });
+
+            Route::prefix('kategori')->name('kategori.')->group(function () {
+                Route::get('/', [\App\Http\Controllers\Laboran\LaboranKategoriController::class, 'index'])->name('index');
+                Route::post('/', [\App\Http\Controllers\Laboran\LaboranKategoriController::class, 'store'])->name('store');
+            });
+
             // Jadwal Pertemuan Kelas
             Route::post('/kelas/{kelas_id}/jadwal', [\App\Http\Controllers\Laboran\LaboranJadwalController::class, 'store'])->name('jadwal.store');
             Route::get('/kelas/{kelas_id}/jadwal/{jadwal_id}', [\App\Http\Controllers\Laboran\LaboranJadwalController::class, 'show'])->name('jadwal.show');
             Route::post('/kelas/{kelas_id}/jadwal/{jadwal_id}/absen-mahasiswa', [\App\Http\Controllers\Laboran\LaboranJadwalController::class, 'absenMahasiswaBulk'])->name('jadwal.absenMahasiswa');
+
+            // Laporan Kerusakan Barang
+            Route::get('/laporan', [\App\Http\Controllers\Laboran\LaboranLaporanController::class, 'index'])->name('laporan.index');
+            Route::post('/jadwal/{jadwal_id}/laporan', [\App\Http\Controllers\Laboran\LaboranLaporanController::class, 'store'])->name('laporan.store');
 
             // Tugas & Laporan Kelas
             Route::get('/kelas/{kelas_id}/tugas/create', [\App\Http\Controllers\Laboran\LaboranTugasController::class, 'create'])->name('tugas.create');

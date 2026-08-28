@@ -11,15 +11,15 @@ Sebelum meng-_upload_ _file_ ke server, pastikan semua _assets_ Frontend telah d
 1. Buka terminal di lokal, pastikan berada di folder _project_.
 2. Ubah konfigurasi di `.env` (lokal) sementara agar _base URL_ menyesuaikan (opsional).
 3. Jalankan perintah kompilasi Vite:
-    ```bash
-    npm install
-    npm run build
-    ```
+   ```bash
+   npm install
+   npm run build
+   ```
 4. Pastikan folder `public/build/` berhasil terbentuk.
 5. Bersihkan _cache_ lokal:
-    ```bash
-    php artisan optimize:clear
-    ```
+   ```bash
+   php artisan optimize:clear
+   ```
 6. Kompres/zip seluruh direktori _project_ menjadi `sislab-fisika.zip` (Kecuali folder `node_modules` dan `.git`).
 
 ---
@@ -34,19 +34,19 @@ Untuk alasan keamanan, file inti Laravel **TIDAK BOLEH** diletakkan di dalam `pu
 4. Pindahkan **SEMUA ISI** dari folder `sislab-app/public/` ke dalam direktori `public_html` (atau folder _addon domain_ Anda).
 5. Buka _file_ `public_html/index.php` yang baru saja dipindah, dan perbarui _path_ ke file inti Laravel:
 
-    Ubah baris:
+   Ubah baris:
 
-    ```php
-    require __DIR__.'/../vendor/autoload.php';
-    $app = require_once __DIR__.'/../bootstrap/app.php';
-    ```
+   ```php
+   require __DIR__.'/../vendor/autoload.php';
+   $app = require_once __DIR__.'/../bootstrap/app.php';
+   ```
 
-    Menjadi:
+   Menjadi:
 
-    ```php
-    require __DIR__.'/../sislab-app/vendor/autoload.php';
-    $app = require_once __DIR__.'/../sislab-app/bootstrap/app.php';
-    ```
+   ```php
+   require __DIR__.'/../sislab-app/vendor/autoload.php';
+   $app = require_once __DIR__.'/../sislab-app/bootstrap/app.php';
+   ```
 
 ---
 
@@ -58,28 +58,27 @@ Untuk alasan keamanan, file inti Laravel **TIDAK BOLEH** diletakkan di dalam `pu
 4. Buka folder `sislab-app/` di File Manager, edit berkas `.env`.
 5. Sesuaikan variabel berikut:
 
-    ```env
-    APP_ENV=production
-    APP_DEBUG=false
-    APP_URL=https://domainanda.com
+   ```env
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://domainanda.com
 
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=namauser_sislab
-    DB_USERNAME=namauser_dbuser
-    DB_PASSWORD=password_db_anda
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=namauser_sislab
+   DB_USERNAME=namauser_dbuser
+   DB_PASSWORD=password_db_anda
 
-    # PENTING UNTUK REVERB & BROADCAST
-    BROADCAST_CONNECTION=reverb
-    REVERB_APP_ID=bebas_isi_angka_random (Misal: 987654)
-    REVERB_APP_KEY=isi_kunci_acak_yg_panjang
-    REVERB_APP_SECRET=isi_rahasia_acak_yg_panjang
-    REVERB_HOST="domainanda.com"
-    REVERB_PORT=8080
-    REVERB_SCHEME=https
-    ```
-
+   # PENTING UNTUK REVERB & BROADCAST
+   BROADCAST_CONNECTION=reverb
+   REVERB_APP_ID=bebas_isi_angka_random (Misal: 987654)
+   REVERB_APP_KEY=isi_kunci_acak_yg_panjang
+   REVERB_APP_SECRET=isi_rahasia_acak_yg_panjang
+   REVERB_HOST="domainanda.com"
+   REVERB_PORT=8080
+   REVERB_SCHEME=https
+   ```
 6. Jika Anda punya akses SSH, masuk dan jalankan migrasi: `php artisan migrate --seed`. Jika tidak, ekspor database dari lokal via phpMyAdmin dan Impor ke phpMyAdmin server.
 
 ---
@@ -99,10 +98,11 @@ Jika Shared Hosting Anda memberikan akses Terminal/SSH, Anda bisa menjalankan pe
 2. Masuk ke direktori aplikasi Anda: `cd sislab-app`
 3. Jika Anda hanya mengetik `php artisan reverb:start`, perintah tersebut akan **mati** begitu Anda menutup tab browser/Terminal.
 4. Oleh karena itu, gunakan `nohup` (No Hang Up) agar perintah tetap hidup meskipun terminal ditutup:
-    ```bash
-    nohup php artisan reverb:start --host="0.0.0.0" --port=8080 > storage/logs/reverb.log 2>&1 &
-    ```
-    *Catatan: Angka `8080` adalah port default. Jika hosting memblokirnya, Anda mungkin perlu minta *support hosting* untuk membukakan port tersebut, atau mencari port lain yang kosong/diizinkan.*
+   ```bash
+   nohup php artisan reverb:start --host="0.0.0.0" --port=8080 > storage/logs/reverb.log 2>&1 &
+   ```
+
+   *Catatan: Angka `8080` adalah port default. Jika hosting memblokirnya, Anda mungkin perlu minta *support hosting* untuk membukakan port tersebut, atau mencari port lain yang kosong/diizinkan.*
 
 ### Metode 2: Trik Cron Jobs (Jika tidak ada akses SSH)
 
@@ -111,10 +111,11 @@ Jika menu Terminal tidak tersedia, kita bisa menggunakan "Cron Jobs" untuk memic
 1. Masuk ke cPanel > **Cron Jobs**.
 2. Tambahkan Cron baru: **Setiap Menit** (\* \* \* \* \*).
 3. Masukkan skrip berikut:
-    ```bash
-    ps aux | grep 'reverb:start' | grep -v grep || cd /home/namausercpanel/sislab-app && /usr/local/bin/php artisan reverb:start --host="0.0.0.0" --port=8080 > /dev/null 2>&1 &
-    ```
-    _(Penjelasan Skrip: Ia mengecek daftar proses server (`ps aux`). Jika tidak ada tulisan `reverb:start`, maka ia akan masuk ke folder `sislab-app` dan menyalakannya. Sesuaikan `/usr/local/bin/php` dengan path eksekusi PHP di hosting Anda)._
+   ```bash
+   ps aux | grep 'reverb:start' | grep -v grep || cd /home/namausercpanel/sislab-app && /usr/local/bin/php artisan reverb:start --host="0.0.0.0" --port=8080 > /dev/null 2>&1 &
+   ```
+
+   _(Penjelasan Skrip: Ia mengecek daftar proses server (`ps aux`). Jika tidak ada tulisan `reverb:start`, maka ia akan masuk ke folder `sislab-app` dan menyalakannya. Sesuaikan `/usr/local/bin/php` dengan path eksekusi PHP di hosting Anda)._
 
 ### Metode 3: Beralih Menggunakan Pusher API (Paling Disarankan untuk Shared Hosting)
 
@@ -127,41 +128,44 @@ Aplikasi ini sudah diprogram (pada berkas `resources/js/echo.js`) agar secara di
 **Langkah-langkah Migrasi ke Pusher:**
 
 1. **Daftar Akun Gratis di Pusher**:
-    - Buka website [pusher.com](https://pusher.com/) dan buat akun (bisa _Login with GitHub/Google_).
-    - Di _dashboard_, klik tombol **"Create App"** di bagian _Channels_.
-    - Beri nama aplikasi (misal: `sislab-fisika`), pilih _cluster_ yang paling dekat (misal: `ap1` untuk Asia Pasifik), dan pilih _framework_ Laravel (sebagai panduan saja).
-    - Klik **Create**.
+
+   - Buka website [pusher.com](https://pusher.com/) dan buat akun (bisa _Login with GitHub/Google_).
+   - Di _dashboard_, klik tombol **"Create App"** di bagian _Channels_.
+   - Beri nama aplikasi (misal: `sislab-fisika`), pilih _cluster_ yang paling dekat (misal: `ap1` untuk Asia Pasifik), dan pilih _framework_ Laravel (sebagai panduan saja).
+   - Klik **Create**.
 2. **Dapatkan _Keys_ Kredensial**:
-    - Masuk ke aplikasi yang baru dibuat, klik menu **App Keys** di bilah kiri.
-    - Anda akan melihat daftar kode rahasia (`app_id`, `key`, `secret`, `cluster`).
+
+   - Masuk ke aplikasi yang baru dibuat, klik menu **App Keys** di bilah kiri.
+   - Anda akan melihat daftar kode rahasia (`app_id`, `key`, `secret`, `cluster`).
 3. **Ubah Berkas `.env` di Hosting Anda**:
-    - Buka cPanel > File Manager > Edit file `.env` milik `sislab-app`.
-    - Ubah `BROADCAST_CONNECTION=reverb` menjadi `pusher`.
-    - Masukkan kredensial yang Anda dapatkan tadi ke pengaturan Pusher dan konfigurasikan Variabel Vite agar Frontend kita membaca kunci tersebut:
 
-    ```env
-    # GANTI INI
-    BROADCAST_CONNECTION=pusher
+   - Buka cPanel > File Manager > Edit file `.env` milik `sislab-app`.
+   - Ubah `BROADCAST_CONNECTION=reverb` menjadi `pusher`.
+   - Masukkan kredensial yang Anda dapatkan tadi ke pengaturan Pusher dan konfigurasikan Variabel Vite agar Frontend kita membaca kunci tersebut:
 
-    # MASUKKAN DATA DARI PUSHER DASHBOARD
-    PUSHER_APP_ID=isi_dengan_app_id_anda
-    PUSHER_APP_KEY=isi_dengan_key_anda
-    PUSHER_APP_SECRET=isi_dengan_secret_anda
-    PUSHER_HOST=
-    PUSHER_PORT=443
-    PUSHER_SCHEME=https
-    PUSHER_APP_CLUSTER=ap1
+   ```env
+   # GANTI INI
+   BROADCAST_CONNECTION=pusher
 
-    # SINKRONISASI KE FRONTEND (SANGAT PENTING)
-    VITE_BROADCAST_CONNECTION="${BROADCAST_CONNECTION}"
-    VITE_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
-    VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
-    ```
+   # MASUKKAN DATA DARI PUSHER DASHBOARD
+   PUSHER_APP_ID=isi_dengan_app_id_anda
+   PUSHER_APP_KEY=isi_dengan_key_anda
+   PUSHER_APP_SECRET=isi_dengan_secret_anda
+   PUSHER_HOST=
+   PUSHER_PORT=443
+   PUSHER_SCHEME=https
+   PUSHER_APP_CLUSTER=ap1
 
+   # SINKRONISASI KE FRONTEND (SANGAT PENTING)
+   VITE_BROADCAST_CONNECTION="${BROADCAST_CONNECTION}"
+   VITE_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+   VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+   ```
 4. **Build Ulang Frontend (Jika Menggunakan Vite)**:
-    - Karena Anda mengubah kredensial `.env` untuk `VITE_...`, file _Javascript_ harus di-_compile_ ulang agar kunci Pusher yang baru disuntikkan ke dalam file `app.js`.
-    - Jika Anda memiliki akses terminal lokal sebelum _upload_ ke server, jalankan `npm run build` sekali lagi, lalu _upload_ ulan folder `public/build`.
-    - Jika sudah ada di server, Anda butuh akses SSH terminal untuk menjalankan `npm run build`.
+
+   - Karena Anda mengubah kredensial `.env` untuk `VITE_...`, file _Javascript_ harus di-_compile_ ulang agar kunci Pusher yang baru disuntikkan ke dalam file `app.js`.
+   - Jika Anda memiliki akses terminal lokal sebelum _upload_ ke server, jalankan `npm run build` sekali lagi, lalu _upload_ ulan folder `public/build`.
+   - Jika sudah ada di server, Anda butuh akses SSH terminal untuk menjalankan `npm run build`.
 
 Dengan langkah ini, Anda **tidak perlu lagi** memikirkan _Cron Jobs_ atau _SSH Nohup_ untuk `php artisan reverb:start`. Layanan notifikasi _realtime_ akan dilayani oleh server luar milik Pusher secara otomatis.
 
@@ -176,10 +180,11 @@ Sama seperti Reverb, gunakan Cron Jobs untuk menjaga _worker_ tetap hidup:
 1. Masuk ke cPanel > **Cron Jobs**.
 2. Tambahkan Cron baru, atur waktu ke **Setiap Menit** (\* \* \* \* \*).
 3. Masukkan instruksi _Cron_:
-    ```bash
-    cd /home/namausercpanel/sislab-app && /usr/local/bin/php artisan queue:work --stop-when-empty
-    ```
-    _(Dengan `--stop-when-empty`, Cron akan memproses antrean jika ada, lalu mati. Dan menit berikutnya akan diulang lagi, menghindari penumpukan memori di Shared Hosting)._
+   ```bash
+   cd /home/namausercpanel/sislab-app && /usr/local/bin/php artisan queue:work --stop-when-empty
+   ```
+
+   _(Dengan `--stop-when-empty`, Cron akan memproses antrean jika ada, lalu mati. Dan menit berikutnya akan diulang lagi, menghindari penumpukan memori di Shared Hosting)._
 
 ---
 
