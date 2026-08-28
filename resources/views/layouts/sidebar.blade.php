@@ -91,10 +91,24 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="#" class="nav-item {{ request()->routeIs('*.laporan.*') ? 'active' : '' }}">
-                        <span class="nav-icon"><i class="bi bi-briefcase"></i></span><span>Laporan</span>
-                    </a>
+                <li class="nav-group {{ request()->routeIs('admin.laporan-laboran.*') || request()->routeIs('admin.laporan.*') ? 'open' : '' }}">
+                    <button class="nav-item nav-toggle" type="button" aria-expanded="false">
+                        <span class="nav-icon"><i class="bi bi-briefcase"></i></span>
+                        <span>Laporan</span>
+                        <i class="bi bi-chevron-down nav-arrow"></i>
+                    </button>
+                    <ul class="nav-submenu">
+                        <li>
+                            <a href="{{ route('admin.laporan-laboran.index') }}" class="nav-subitem {{ request()->routeIs('admin.laporan-laboran.*') ? 'active' : '' }}">
+                                <i class="bi bi-tools"></i><span>Laporan Kerusakan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.laporan.index') }}" class="nav-subitem {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
+                                <i class="bi bi-printer"></i><span>Cetak Laporan</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li>
@@ -115,17 +129,17 @@
                     </button>
                     <ul class="nav-submenu">
                         <li>
-                            <a href="#" class="nav-subitem">
+                            <a href="{{ route('laboran.ruangan.index') }}" class="nav-subitem {{ request()->routeIs('laboran.ruangan.*') ? 'active' : '' }}">
                                 <i class="bi bi-building"></i><span>Ruang Lab</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-subitem">
+                            <a href="{{ route('laboran.barang.index') }}" class="nav-subitem {{ request()->routeIs('laboran.barang.*') ? 'active' : '' }}">
                                 <i class="bi bi-tools"></i><span>Barang</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-subitem">
+                            <a href="{{ route('laboran.kategori.index') }}" class="nav-subitem {{ request()->routeIs('laboran.kategori.*') ? 'active' : '' }}">
                                 <i class="bi bi-tag"></i><span>Kategori</span>
                             </a>
                         </li>
@@ -139,7 +153,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="nav-item {{ request()->routeIs('*.laporan.*') ? 'active' : '' }}">
+                    <a href="{{ route('laboran.laporan.index') }}" class="nav-item {{ request()->routeIs('laboran.laporan.*') ? 'active' : '' }}">
                         <span class="nav-icon"><i class="bi bi-briefcase"></i></span><span>Laporan</span>
                     </a>
                 </li>

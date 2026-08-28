@@ -113,6 +113,10 @@
                         class="tab-link border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-600 py-4 px-6 text-sm font-medium transition-colors whitespace-nowrap">
                         <i class="bi bi-journal-text mr-1"></i> Tugas & Laporan
                     </a>
+                    <a href="javascript:void(0)" onclick="switchTab('laporan')" id="tab-laporan"
+                        class="tab-link border-b-2 border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-white dark:hover:border-slate-600 py-4 px-6 text-sm font-medium transition-colors whitespace-nowrap">
+                        <i class="bi bi-clipboard2-check mr-1"></i> Laporan Kondisi Barang
+                    </a>
                 </nav>
             </div>
 
@@ -254,6 +258,95 @@
                 @endif
             </div> <!-- End Tab Tugas -->
 
+            <!-- Tab Laporan Laboran -->
+            <div id="content-laporan" class="tab-content hidden">
+                <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4">
+                        <i class="bi bi-clipboard2-check text-green-500 mr-2"></i> Laporan Kerusakan & Kondisi Barang
+                    </h3>
+                    
+                    @if($laporan)
+                        <!-- Laporan sudah disubmit -->
+                        <div class="rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                            <div class="bg-slate-50 dark:bg-slate-800 px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                                <h4 class="font-semibold text-slate-800 dark:text-white">Detail Laporan</h4>
+                                @if($laporan->status_admin == 'reviewed')
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-100 text-emerald-800">
+                                        <i class="bi bi-check-circle mr-1"></i> Telah Direview Admin
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-amber-100 text-amber-800">
+                                        <i class="bi bi-clock-history mr-1"></i> Menunggu Review Admin
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Status Pelaksanaan SOP</p>
+                                    <p class="text-sm font-medium text-slate-900 dark:text-white capitalize">
+                                        {{ str_replace('_', ' ', $laporan->status_sop) }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Kondisi Barang</p>
+                                    @if($laporan->kelayakan_barang == 'semua_layak')
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">Semua Layak / Baik</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800">Ada yang Rusak</span>
+                                    @endif
+                                </div>
+                                @if($laporan->kelayakan_barang == 'ada_yang_rusak')
+                                <div>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Catatan Temuan (Barang Rusak)</p>
+                                    <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg text-sm text-slate-900 dark:text-white whitespace-pre-wrap">{{ $laporan->catatan_temuan }}</div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    @else
+                        <!-- Form Laporan Baru -->
+                        <form action="{{ route('laboran.laporan.store', $jadwal->id) }}" method="POST">
+                            @csrf
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Status Pelaksanaan SOP</label>
+                                    <select name="status_sop" required class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500">
+                                        <option value="dijalankan">SOP Dijalankan Penuh</option>
+                                        <option value="dijalankan_sebagian">SOP Dijalankan Sebagian</option>
+                                        <option value="tidak_dijalankan">SOP Tidak Dijalankan</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Kondisi Barang Setelah Praktikum</label>
+                                    <div class="flex flex-col sm:flex-row gap-4">
+                                        <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800 transition-colors">
+                                            <input type="radio" name="kelayakan_barang" value="semua_layak" checked class="w-4 h-4 text-green-600 bg-slate-100 border-slate-300 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" onchange="toggleCatatan(false)">
+                                            <span class="ml-2 text-sm font-medium text-slate-900 dark:text-slate-300">Semua Layak / Baik</span>
+                                        </label>
+                                        <label class="flex items-center p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800 transition-colors">
+                                            <input type="radio" name="kelayakan_barang" value="ada_yang_rusak" class="w-4 h-4 text-red-600 bg-slate-100 border-slate-300 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600" onchange="toggleCatatan(true)">
+                                            <span class="ml-2 text-sm font-medium text-slate-900 dark:text-slate-300">Ada yang Rusak</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="catatan_temuan_container" class="hidden">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Catatan Kerusakan Barang <span class="text-red-500">*</span></label>
+                                    <textarea name="catatan_temuan" id="catatan_temuan" rows="4" placeholder="Sebutkan detail barang yang rusak..." class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-green-500 dark:focus:border-green-500"></textarea>
+                                </div>
+                                
+                                <div class="pt-4 border-t border-slate-100 dark:border-slate-700">
+                                    <button type="submit" class="px-5 py-2.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 transition-colors flex items-center gap-2">
+                                        <i class="bi bi-send"></i> Kirim Laporan ke Admin
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    @endif
+                </div>
+            </div> <!-- End Tab Laporan -->
+
         </div>
 
     </div>
@@ -272,6 +365,16 @@
         $('#tab-' + tabId).removeClass('border-transparent text-slate-500 font-medium')
                           .addClass('border-green-500 text-green-600 font-bold');
         $('#content-' + tabId).removeClass('hidden').addClass('block');
+    }
+
+    function toggleCatatan(show) {
+        if(show) {
+            $('#catatan_temuan_container').removeClass('hidden');
+            $('#catatan_temuan').prop('required', true);
+        } else {
+            $('#catatan_temuan_container').addClass('hidden');
+            $('#catatan_temuan').prop('required', false);
+        }
     }
 </script>
 @endpush

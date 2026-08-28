@@ -8,6 +8,7 @@ use App\Models\KelasPraktikum;
 use App\Models\Absensi;
 use App\Models\Enrollment;
 use App\Models\User;
+use App\Models\LaporanLaboran;
 use App\Notifications\JadwalBaruNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -103,7 +104,9 @@ class LaboranJadwalController extends Controller
                              ->pluck('id');
         $minggu_ke = $semuaJadwal->search($jadwal->id) + 1;
 
-        return view('pages.laboran.jadwal.detail-jadwal', compact('kelas', 'jadwal', 'mahasiswas', 'minggu_ke'));
+        $laporan = LaporanLaboran::where('jadwal_id', $jadwal->id)->first();
+
+        return view('pages.laboran.jadwal.detail-jadwal', compact('kelas', 'jadwal', 'mahasiswas', 'minggu_ke', 'laporan'));
     }
 
     /**

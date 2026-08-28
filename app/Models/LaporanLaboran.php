@@ -11,7 +11,7 @@ class LaporanLaboran extends Model
     protected $table = 'laporan_laborans';
 
     protected $fillable = [
-        'status_sop', 'kelayakan_barang', 'catatan_temuan', 'status_admin',
+        'jadwal_id', 'laboran_id', 'status_sop', 'kelayakan_barang', 'catatan_temuan', 'status_admin',
     ];
 
     public function jadwal(): BelongsTo

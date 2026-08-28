@@ -9,17 +9,22 @@ Dokumen ini berisi panduan langkah demi langkah tentang bagaimana **User1** (Own
 User1 adalah pihak yang saat ini sedang memegang *source code* dan telah membuat repositori di GitHub.
 
 ### 1. Inisialisasi dan Push Kode ke GitHub
+
 Pastikan seluruh pekerjaan saat ini (hingga titik ini) sudah di-push ke branch utama (`main` atau `master`).
 Jalankan perintah ini di terminal (VS Code / Git Bash) di folder project:
+
 ```bash
 git add .
 git commit -m "Initial commit atau status terakhir aplikasi"
 git push origin main
 ```
+
 *(Catatan: Pastikan file `.env`, folder `/vendor`, dan `/node_modules` **tidak** ikut ter-push, hal ini seharusnya sudah diatur otomatis di file `.gitignore` bawaan Laravel).*
 
 ### 2. Mengundang User2 Sebagai Kolaborator
+
 Agar User2 bisa men-push kode ke repository Anda, Anda harus memberinya akses:
+
 1. Buka Repositori GitHub Anda di browser.
 2. Pergi ke tab **Settings** > **Collaborators** (di menu sebelah kiri).
 3. Klik tombol **Add people**.
@@ -33,18 +38,23 @@ Agar User2 bisa men-push kode ke repository Anda, Anda harus memberinya akses:
 User2 adalah developer yang akan melanjutkan fitur dan baru saja diundang ke repositori.
 
 ### 1. Menerima Undangan (Accept Invitation)
+
 - Buka email yang terdaftar di GitHub, lalu klik **View invitation**.
 - Atau langsung login ke GitHub dan buka URL repositori User1, lalu akan muncul tombol **Accept Invitation**.
 
 ### 2. Clone Project ke Komputer Lokal
+
 Setelah mendapat akses, User2 perlu mengunduh repositori tersebut ke komputernya.
+
 ```bash
 git clone https://github.com/username_user1/sislab-fisika.git
 cd sislab-fisika
 ```
 
 ### 3. Setup Project Laravel (Hanya Saat Pertama Kali)
+
 Karena `.env`, `/vendor`, dan `/node_modules` tidak diikutsertakan di GitHub, User2 harus merakit (setup) aplikasinya:
+
 1. Copy file `.env.example` menjadi `.env`.
    ```bash
    copy .env.example .env
@@ -63,6 +73,7 @@ Karena `.env`, `/vendor`, dan `/node_modules` tidak diikutsertakan di GitHub, Us
    ```bash
    php artisan migrate --seed
    ```
+
 *(Sekarang aplikasi sudah bisa dijalankan oleh User2 menggunakan `php artisan serve`)*.
 
 ---
@@ -72,31 +83,41 @@ Karena `.env`, `/vendor`, dan `/node_modules` tidak diikutsertakan di GitHub, Us
 **SANGAT PENTING:** Dilarang mengedit langsung di branch `main`! Setiap ingin menambah fitur baru, selalu buat **Branch Baru**.
 
 ### 1. Sinkronisasi (Wajib Sebelum Mulai Ngoding)
+
 Pastikan branch `main` sudah paling update dengan kode terbaru dari User1:
+
 ```bash
 git checkout main
 git pull origin main
 ```
 
 ### 2. Membuat Branch Baru
+
 Misal User2 ingin membuat fitur absensi, maka buat branch khusus:
+
 ```bash
 git checkout -b fitur-absensi
 ```
+
 *(Sekarang User2 sudah berpindah ke branch `fitur-absensi` dan bebas melakukan koding).*
 
 ### 3. Menyimpan dan Mengirim Perubahan (Commit & Push)
+
 Setelah User2 selesai mengoding fitur absensi, simpan perubahan:
+
 ```bash
 git add .
 git commit -m "Menyelesaikan fitur absensi mahasiswa"
 ```
+
 Kemudian kirim branch ini ke GitHub:
+
 ```bash
 git push origin fitur-absensi
 ```
 
 ### 4. Membuat Pull Request (PR) di GitHub
+
 1. Buka Repositori di GitHub.
 2. Akan muncul notifikasi bar kuning dengan tombol **"Compare & pull request"**. Klik tombol tersebut.
 3. Beri judul dan deskripsi tentang fitur absensi yang telah dibuat.
@@ -121,6 +142,7 @@ Setelah User2 membuat *Pull Request*, User1 (sebagai pemilik kode) bertugas meni
 Setelah kode fitur absensi dari User2 berhasil di-merge ke branch `main` di GitHub, **kedua belah pihak** harus menarik kode gabungan tersebut ke komputer lokal masing-masing agar kembali sinkron.
 
 **Perintah yang harus dijalankan oleh User1 & User2 di komputer masing-masing:**
+
 ```bash
 # Pindah ke branch utama
 git checkout main
