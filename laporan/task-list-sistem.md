@@ -89,9 +89,9 @@ Sesuaikan dengan Bagian C pada _Activity Diagram_.
 
 Sesuai dengan Bagian D pada _Activity Diagram_.
 
-- [ ] **Dashboard Analytics Admin**:
-    - [ ] Statistik aktivitas seluruh kelas (Jumlah mahasiswa aktif, kelas berjalan).
-    - [ ] Statistik kesehatan Inventaris (Berapa % alat yang layak, berapa yang rusak).
+- [x] **Dashboard Analytics Admin**:
+    - [x] Statistik aktivitas seluruh kelas (Jumlah mahasiswa aktif, kelas berjalan).
+    - [x] Statistik kesehatan Inventaris (Berapa % alat yang layak, berapa yang rusak).
 - [x] **Cetak Laporan Keseluruhan**:
     - [x] Pembuatan Dokumen Cetak/PDF untuk rekapitulasi nilai per semester.
     - [x] Laporan akhir inventaris laboratorium sebagai bahan evaluasi tahunan.

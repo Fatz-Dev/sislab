@@ -1,9 +1,9 @@
     <!-- ── Mobile Header ─────────────────────────────────── -->
     <header class="m-header fixed top-0 left-0 w-full z-50 shadow-sm" id="mobileHeader">
-        <div class="m-header-left">
+        <a href="{{ route('mahasiswa.dashboard') }}" class="m-header-left" style="display: flex; align-items: center; text-decoration: none;">
             <img src="{{ asset('assets/image/Lambang_UIN_Ar-Raniry.png') }}" style="max-width: 3rem; max-height: 3rem;" />
-            <span class="m-header-title">SISLAB FISIKA</span>
-        </div>
+            <span class="m-header-title" style="margin-left: 0.5rem;">SISLAB FISIKA</span>
+        </a>
         <div class="m-header-right">
             <button class="m-header-btn" id="menuToggle" aria-label="Menu">
                 <i class="bi bi-list"></i>

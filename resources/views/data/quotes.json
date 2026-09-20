@@ -1,0 +1,81 @@
+{
+  "quotes": [
+    {
+      "id": 1,
+      "roles": ["dosen", "laboran"],
+      "tema": "Tanggung Jawab",
+      "teks": "Setiap kalian adalah pemimpin, dan setiap pemimpin akan dimintai pertanggungjawaban atas yang dipimpinnya.",
+      "sumber": "HR. Bukhari dan Muslim"
+    },
+    {
+      "id": 2,
+      "roles": ["dosen", "laboran"],
+      "tema": "Tanggung Jawab",
+      "teks": "Sesungguhnya Allah menyuruh kamu menyampaikan amanat kepada yang berhak menerimanya. Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya.",
+      "sumber": "QS. An-Nisa: 58 & HR. Ahmad"
+    },
+    {
+      "id": 3,
+      "roles": ["dosen", "laboran"],
+      "tema": "Tanggung Jawab",
+      "teks": "Pekerjaan yang dilakukan dengan rasa tanggung jawab dan keikhlasan adalah bentuk ibadah yang bernilai pahala di sisi Allah.",
+      "sumber": "Nasihat Islami"
+    },
+    {
+      "id": 4,
+      "roles": ["dosen", "laboran", "mahasiswa"],
+      "tema": "Bersungguh-sungguh dalam Belajar",
+      "teks": "Man Jadda Wajada. Barangsiapa yang bersungguh-sungguh, maka dia akan mendapatkan kesuksesan.",
+      "sumber": "Pepatah Arab"
+    },
+    {
+      "id": 5,
+      "roles": ["dosen", "laboran", "mahasiswa"],
+      "tema": "Bersungguh-sungguh dalam Belajar",
+      "teks": "Barangsiapa menempuh suatu jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga.",
+      "sumber": "HR. Muslim"
+    },
+    {
+      "id": 6,
+      "roles": ["dosen", "laboran", "mahasiswa"],
+      "tema": "Bersungguh-sungguh dalam Belajar",
+      "teks": "Bila kamu tak tahan lelahnya belajar, maka kamu akan menanggung perihnya kebodohan.",
+      "sumber": "Imam Syafi'i"
+    },
+    {
+      "id": 7,
+      "roles": ["dosen", "laboran", "mahasiswa"],
+      "tema": "Bersungguh-sungguh dalam Belajar",
+      "teks": "Ilmu itu tidak akan didapatkan dengan tubuh yang santai (bermalas-malasan).",
+      "sumber": "Yahya bin Abi Katsir"
+    },
+    {
+      "id": 8,
+      "roles": ["mahasiswa"],
+      "tema": "Larangan Menyontek dan Kejujuran",
+      "teks": "Barangsiapa yang menipu kami, maka ia bukan golongan kami.",
+      "sumber": "HR. Muslim"
+    },
+    {
+      "id": 9,
+      "roles": ["mahasiswa"],
+      "tema": "Larangan Menyontek dan Kejujuran",
+      "teks": "Wahai orang-orang yang beriman! Bertakwalah kepada Allah, dan bersamalah kamu dengan orang-orang yang benar (jujur).",
+      "sumber": "QS. At-Taubah: 119"
+    },
+    {
+      "id": 10,
+      "roles": ["mahasiswa"],
+      "tema": "Larangan Menyontek dan Kejujuran",
+      "teks": "Hendaklah kalian senantiasa berlaku jujur, karena sesungguhnya kejujuran akan mengantarkan pada kebaikan dan sesungguhnya kebaikan akan mengantarkan pada surga.",
+      "sumber": "HR. Bukhari dan Muslim"
+    },
+    {
+      "id": 11,
+      "roles": ["mahasiswa"],
+      "tema": "Larangan Menyontek dan Kejujuran",
+      "teks": "Keberkahan ilmu tidak diukur dari seberapa tinggi nilai yang didapat, melainkan dari kejujuran dan usaha keras saat meraihnya.",
+      "sumber": "Nasihat Islami"
+    }
+  ]
+}

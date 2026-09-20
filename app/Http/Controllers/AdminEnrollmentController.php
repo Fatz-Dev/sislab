@@ -43,7 +43,7 @@ class AdminEnrollmentController extends Controller
         // Hitung pending untuk badge
         $pendingCount = KelasPraktikumMahasiswa::where('status', 'pending')->count();
 
-        return view('admin.enrollments.index', compact(
+        return view('pages.admin.enrollments.index', compact(
             'enrollments',
             'kelasList',
             'pendingCount',

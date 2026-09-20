@@ -40,7 +40,13 @@
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">NIM</p>
-                <p class="text-base text-slate-900 font-medium m-0">{{ Auth::user()->mahasiswaProfile->nim ?? '-' }}</p>
+                <p class="text-base text-slate-900 font-medium m-0">
+                    @if(Auth::user()->mahasiswaProfile && Auth::user()->mahasiswaProfile->nim)
+                        {{ Auth::user()->mahasiswaProfile->nim }}
+                    @else
+                        <span class="text-slate-400 italic">Belum diisi</span>
+                    @endif
+                </p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Alamat Email</p>
@@ -48,15 +54,33 @@
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Nomor Telepon</p>
-                <p class="text-base text-slate-900 font-medium m-0">{{ Auth::user()->phone ?? '-' }}</p>
+                <p class="text-base text-slate-900 font-medium m-0">
+                    @if(Auth::user()->phone)
+                        {{ Auth::user()->phone }}
+                    @else
+                        <span class="text-slate-400 italic">Belum diisi</span>
+                    @endif
+                </p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Jurusan</p>
-                <p class="text-base text-slate-900 font-medium m-0">{{ Auth::user()->mahasiswaProfile->jurusan ?? '-' }}</p>
+                <p class="text-base text-slate-900 font-medium m-0">
+                    @if(Auth::user()->mahasiswaProfile && Auth::user()->mahasiswaProfile->jurusan)
+                        {{ Auth::user()->mahasiswaProfile->jurusan }}
+                    @else
+                        <span class="text-slate-400 italic">Belum diisi</span>
+                    @endif
+                </p>
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Angkatan</p>
-                <p class="text-base text-slate-900 font-medium m-0">{{ Auth::user()->mahasiswaProfile->angkatan ?? '-' }}</p>
+                <p class="text-base text-slate-900 font-medium m-0">
+                    @if(Auth::user()->mahasiswaProfile && Auth::user()->mahasiswaProfile->angkatan)
+                        {{ Auth::user()->mahasiswaProfile->angkatan }}
+                    @else
+                        <span class="text-slate-400 italic">Belum diisi</span>
+                    @endif
+                </p>
             </div>
         </div>
     </div>
@@ -65,33 +89,68 @@
 
 <!-- Modal Edit Profil -->
 <div id="modalEditProfile" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden" style="animation: modalFadeIn 0.3s ease-out;">
-        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-slate-900 m-0">Edit Profil</h3>
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden" style="animation: modalFadeIn 0.3s ease-out; max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+            <h3 class="text-xl font-bold text-slate-900 m-0 flex items-center gap-2">
+                <i class="bi bi-pencil-square text-blue-600"></i> Edit Profil
+            </h3>
             <button type="button" onclick="closeEditModal()" class="text-slate-400 hover:text-slate-900 transition-colors bg-transparent border-none cursor-pointer text-xl">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
-        <form action="#" method="POST" enctype="multipart/form-data" class="m-0" onsubmit="event.preventDefault(); closeEditModal(); window.showToast('Fitur simpan profil sedang dalam pengembangan');">
-            @csrf
-            <div class="p-6 flex flex-col gap-4">
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nomor Telepon</label>
-                    <input type="text" name="phone" value="{{ Auth::user()->phone }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all" placeholder="Contoh: 08123456789">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Profil</label>
-                    <div class="p-4 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50 text-center">
-                        <input type="file" name="photo" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer" accept="image/*">
-                        <p class="text-xs text-slate-400 mt-2 mb-0">Format didukung: JPG, PNG. Maksimal 2MB.</p>
+        <div class="p-6 overflow-y-auto flex-1">
+            <form id="form-edit-profile" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="m-0">
+                @csrf
+                @method('PUT')
+                
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" name="name" id="name" value="{{ Auth::user()->name }}" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all">
+                        <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-slate-700 mb-1">Email</label>
+                        <input type="email" name="email" id="email" value="{{ Auth::user()->email }}" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all">
+                        <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-slate-700 mb-1">Nomor Telepon</label>
+                        <input type="text" name="phone" id="phone" value="{{ Auth::user()->phone }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all" placeholder="Contoh: 08123456789">
+                        <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
+                    </div>
+                    <div>
+                        <label for="photo" class="block text-sm font-semibold text-slate-700 mb-1">Foto Profil Baru (Opsional)</label>
+                        <div class="p-4 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50 text-center">
+                            <input type="file" name="photo" id="photo" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                            <p class="text-xs text-slate-400 mt-2 mb-0">Format didukung: JPG, PNG. Maksimal 2MB.</p>
+                        </div>
+                        <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
+                    </div>
+                    
+                    <div class="pt-4 mt-2 border-t border-slate-100">
+                        <h4 class="text-sm font-semibold text-slate-900 mb-3">Ubah Password (Opsional)</h4>
+                        <div class="flex flex-col gap-4">
+                            <div>
+                                <label for="password" class="block text-sm font-semibold text-slate-700 mb-1">Password Baru</label>
+                                <input type="password" name="password" id="password" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all" placeholder="Kosongkan jika tidak ingin diubah">
+                                <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
+                            </div>
+                            <div>
+                                <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-1">Konfirmasi Password Baru</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-                <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors">Batal</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">Simpan</button>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+            <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors">Batal</button>
+            <button type="button" id="btn-submit-profile" class="px-4 py-2 bg-blue-600 text-white border-none rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2">
+                Simpan Perubahan
+            </button>
+        </div>
     </div>
 </div>
 
@@ -120,6 +179,66 @@
         if (e.target === this) {
             closeEditModal();
         }
+    });
+
+    $(document).ready(function() {
+        $('#btn-submit-profile').on('click', function() {
+            $('#form-edit-profile').submit();
+        });
+
+        $('#form-edit-profile').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const url = form.attr('action');
+            const submitBtn = $('#btn-submit-profile');
+            const originalText = submitBtn.html();
+            
+            // Clear previous errors
+            form.find('.invalid-feedback').addClass('hidden').text('');
+            form.find('input').removeClass('border-red-500 focus:border-red-500 focus:ring-red-500');
+
+            submitBtn.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Menyimpan...');
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    if (window.showToast) {
+                        window.showToast(response.message);
+                    }
+                    setTimeout(() => window.location.reload(), 1000);
+                },
+                error: function(xhr) {
+                    submitBtn.prop('disabled', false).html(originalText);
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON.errors;
+                        for (const key in errors) {
+                            const input = form.find(`[name="${key}"]`);
+                            input.addClass('border-red-500 focus:border-red-500 focus:ring-red-500');
+                            input.siblings('.invalid-feedback').removeClass('hidden').text(errors[key][0]);
+                        }
+                    } else {
+                        let errorMsg = "Terjadi kesalahan saat menyimpan profil.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        }
+                        if (window.showToast) {
+                            window.showToast(errorMsg);
+                        } else {
+                            alert(errorMsg);
+                        }
+                    }
+                }
+            });
+        });
     });
 </script>
 @endpush

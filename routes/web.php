@@ -7,20 +7,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\MahasiswaProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes — SISLAB FISIKA
-|--------------------------------------------------------------------------
-|
-| Route dikelompokkan berdasarkan peran (role):
-| - Guest    : halaman login & register (hanya untuk user yang belum login)
-| - Auth     : route yang memerlukan autentikasi
-|   ├─ Admin     : /admin/*
-|   ├─ Dosen     : /dosen/*
-|   ├─ Laboran   : /laboran/*
-|   └─ Mahasiswa : /mahasiswa/*
-|
-*/
+
 
 // ─── Guest Routes (belum login) ──────────────────────────────
 Route::middleware('guest')->group(function () {
@@ -40,6 +27,7 @@ Route::middleware('auth')->group(function () {
 
     // Profile global
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // ── Admin ────────────────────────────────────────────────
     Route::middleware('role:admin')
@@ -126,6 +114,11 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'index'])->name('index');
                 Route::get('/cetak-nilai', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakNilai'])->name('cetak-nilai');
                 Route::get('/cetak-inventaris', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakInventaris'])->name('cetak-inventaris');
+                Route::get('/cetak-inventaris/pdf', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakInventarisPdf'])->name('cetak-inventaris-pdf');
+                Route::get('/cetak-inventaris/excel', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakInventarisExcel'])->name('cetak-inventaris-excel');
+                Route::get('/cetak-laboran', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakLaboran'])->name('cetak-laboran');
+                Route::get('/cetak-laboran/pdf', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakLaboranPdf'])->name('cetak-laboran-pdf');
+                Route::get('/cetak-laboran/excel', [\App\Http\Controllers\Admin\AdminLaporanController::class, 'cetakLaboranExcel'])->name('cetak-laboran-excel');
             });
         });
 
@@ -146,6 +139,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/kelas/{kelas_id}/jadwal', [\App\Http\Controllers\Dosen\DosenJadwalController::class, 'store'])->name('jadwal.store');
             Route::get('/kelas/{kelas_id}/jadwal/{jadwal_id}', [\App\Http\Controllers\Dosen\DosenJadwalController::class, 'show'])->name('jadwal.show');
             Route::post('/kelas/{kelas_id}/jadwal/{jadwal_id}/absen-laboran', [\App\Http\Controllers\Dosen\DosenJadwalController::class, 'absenLaboran'])->name('jadwal.absenLaboran');
+            
+            // Laporan / Rekap Keseluruhan
+            Route::get('/rekap', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'index'])->name('rekap.index');
+            Route::get('/rekap/{id}', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'show'])->name('rekap.show');
+            Route::get('/rekap/{id}/cetak', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'cetak'])->name('rekap.cetak');
+            Route::get('/rekap/{id}/export-pdf', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'exportPdf'])->name('rekap.export-pdf');
+            Route::get('/rekap/{id}/export-absensi', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'exportAbsensi'])->name('rekap.export-absensi');
+            Route::get('/rekap/{id}/export-nilai', [\App\Http\Controllers\Dosen\DosenRekapController::class, 'exportNilai'])->name('rekap.export-nilai');
         });
 
     // ── Laboran ──────────────────────────────────────────────
@@ -192,6 +193,14 @@ Route::middleware('auth')->group(function () {
             // Penilaian Tugas
             Route::get('/kelas/{kelas_id}/tugas/{tugas_id}/submissions', [\App\Http\Controllers\Laboran\LaboranTugasController::class, 'submissions'])->name('tugas.submissions');
             Route::post('/kelas/{kelas_id}/tugas/{tugas_id}/grade/{mahasiswa_id}', [\App\Http\Controllers\Laboran\LaboranTugasController::class, 'grade'])->name('tugas.grade');
+            
+            // Laporan / Rekap Keseluruhan
+            Route::get('/rekap', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'index'])->name('rekap.index');
+            Route::get('/rekap/{id}', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'show'])->name('rekap.show');
+            Route::get('/rekap/{id}/cetak', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'cetak'])->name('rekap.cetak');
+            Route::get('/rekap/{id}/export-pdf', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'exportPdf'])->name('rekap.export-pdf');
+            Route::get('/rekap/{id}/export-absensi', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'exportAbsensi'])->name('rekap.export-absensi');
+            Route::get('/rekap/{id}/export-nilai', [\App\Http\Controllers\Laboran\LaboranRekapController::class, 'exportNilai'])->name('rekap.export-nilai');
         });
 
     // ── Mahasiswa ────────────────────────────────────────────

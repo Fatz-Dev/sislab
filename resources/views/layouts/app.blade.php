@@ -43,6 +43,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Lexend:wght@300;400;500;600&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('assets/styles.css') }}" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('styles')
   </head>
   <body>
@@ -61,6 +62,7 @@
     </div>
     @auth
         @include('modal-notif')
+        @include('components.islamic-quotes-modal')
     @endauth
     <div class="toast" id="toast" role="status"></div>
     <script src="{{ asset('assets/app.js') }}"></script>

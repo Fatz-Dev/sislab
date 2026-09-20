@@ -7,8 +7,13 @@ use App\Models\BarangInventaris;
 use App\Models\KelasPraktikum;
 use App\Models\Ruangan;
 use App\Models\Semester;
+use App\Models\LaporanLaboran;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use App\Exports\InventarisExport;
+use App\Exports\LaboranExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminLaporanController extends Controller
 {
@@ -19,9 +24,13 @@ class AdminLaporanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return $request->tab === 'inventaris'
-                ? $this->datatableInventaris($request)
-                : $this->datatableNilai($request);
+            if ($request->tab === 'inventaris') {
+                return $this->datatableInventaris($request);
+            } elseif ($request->tab === 'laboran') {
+                return $this->datatableLaboran($request);
+            } else {
+                return $this->datatableNilai($request);
+            }
         }
 
         $semesters = Semester::orderByDesc('id')->get();
@@ -101,7 +110,6 @@ class AdminLaporanController extends Controller
     public function cetakInventaris(Request $request)
     {
         $ruangan_id = $request->query('ruangan_id');
-
         $ruangan = $ruangan_id ? Ruangan::find($ruangan_id) : null;
 
         $barangs = BarangInventaris::with(['ruangan', 'kategoriBarang'])
@@ -113,5 +121,81 @@ class AdminLaporanController extends Controller
         $ruangans = Ruangan::orderBy('nama_ruangan')->get();
 
         return view('pages.admin.laporan.cetak-inventaris', compact('barangs', 'ruangan', 'ruangans'));
+    }
+
+    private function datatableLaboran(Request $request)
+    {
+        $query = LaporanLaboran::with(['jadwal.kelasPraktikum.ruangan', 'laboran'])
+            ->when($request->filled('status_admin'), fn($q) => $q->where('status_admin', $request->status_admin))
+            ->when($request->filled('ruangan_id'), function($q) use ($request) {
+                $q->whereHas('jadwal.kelasPraktikum', function($q2) use ($request) {
+                    $q2->where('ruangan_id', $request->ruangan_id);
+                });
+            })
+            ->when($request->filled('start_date'), fn($q) => $q->whereDate('created_at', '>=', $request->start_date))
+            ->when($request->filled('end_date'), fn($q) => $q->whereDate('created_at', '<=', $request->end_date));
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('tanggal', fn($row) => $row->created_at->format('d/m/Y H:i'))
+            ->addColumn('ruangan', fn($row) => $row->jadwal->kelasPraktikum->ruangan->nama_ruangan ?? '-')
+            ->addColumn('kelas', fn($row) => $row->jadwal->kelasPraktikum->nama_kelas ?? '-')
+            ->addColumn('laboran', fn($row) => $row->laboran->name ?? '-')
+            ->make(true);
+    }
+
+    public function cetakInventarisPdf(Request $request)
+    {
+        $ruangan_id = $request->query('ruangan_id');
+        $ruangan = $ruangan_id ? Ruangan::find($ruangan_id) : null;
+        $barangs = BarangInventaris::with(['ruangan', 'kategoriBarang'])
+            ->when($ruangan_id, fn($q) => $q->where('ruangan_id', $ruangan_id))
+            ->orderBy('ruangan_id')->orderBy('nama_barang')->get();
+
+        $pdf = Pdf::loadView('pages.admin.laporan.cetak-inventaris-pdf', compact('barangs', 'ruangan'));
+        return $pdf->download('laporan-inventaris-'.date('YmdHis').'.pdf');
+    }
+
+    public function cetakInventarisExcel(Request $request)
+    {
+        return Excel::download(new InventarisExport($request->query('ruangan_id')), 'laporan-inventaris-'.date('YmdHis').'.xlsx');
+    }
+
+    public function cetakLaboran(Request $request)
+    {
+        $query = LaporanLaboran::with(['jadwal.kelasPraktikum.ruangan', 'laboran'])
+            ->when($request->filled('status_admin'), fn($q) => $q->where('status_admin', $request->status_admin))
+            ->when($request->filled('ruangan_id'), function($q) use ($request) {
+                $q->whereHas('jadwal.kelasPraktikum', function($q2) use ($request) {
+                    $q2->where('ruangan_id', $request->ruangan_id);
+                });
+            })
+            ->when($request->filled('start_date'), fn($q) => $q->whereDate('created_at', '>=', $request->start_date))
+            ->when($request->filled('end_date'), fn($q) => $q->whereDate('created_at', '<=', $request->end_date));
+
+        $laporans = $query->orderBy('created_at', 'desc')->get();
+        return view('pages.admin.laporan.cetak-laboran', compact('laporans'));
+    }
+
+    public function cetakLaboranPdf(Request $request)
+    {
+        $query = LaporanLaboran::with(['jadwal.kelasPraktikum.ruangan', 'laboran'])
+            ->when($request->filled('status_admin'), fn($q) => $q->where('status_admin', $request->status_admin))
+            ->when($request->filled('ruangan_id'), function($q) use ($request) {
+                $q->whereHas('jadwal.kelasPraktikum', function($q2) use ($request) {
+                    $q2->where('ruangan_id', $request->ruangan_id);
+                });
+            })
+            ->when($request->filled('start_date'), fn($q) => $q->whereDate('created_at', '>=', $request->start_date))
+            ->when($request->filled('end_date'), fn($q) => $q->whereDate('created_at', '<=', $request->end_date));
+
+        $laporans = $query->orderBy('created_at', 'desc')->get();
+        $pdf = Pdf::loadView('pages.admin.laporan.cetak-laboran-pdf', compact('laporans'))->setPaper('a4', 'landscape');
+        return $pdf->download('laporan-laboran-'.date('YmdHis').'.pdf');
+    }
+
+    public function cetakLaboranExcel(Request $request)
+    {
+        return Excel::download(new LaboranExport($request->query('status_admin'), $request->query('ruangan_id'), $request->query('start_date'), $request->query('end_date')), 'laporan-laboran-'.date('YmdHis').'.xlsx');
     }
 }

@@ -35,11 +35,11 @@
                                 <i class="bi bi-tools"></i><span>Barang</span>
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="#" class="nav-subitem">
                                 <i class="bi bi-tag"></i><span>Kategori</span>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
@@ -152,10 +152,24 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="{{ route('laboran.laporan.index') }}" class="nav-item {{ request()->routeIs('laboran.laporan.*') ? 'active' : '' }}">
-                        <span class="nav-icon"><i class="bi bi-briefcase"></i></span><span>Laporan</span>
-                    </a>
+                <li class="nav-group {{ request()->routeIs('laboran.laporan.*') || request()->routeIs('laboran.rekap.*') ? 'open' : '' }}">
+                    <button class="nav-item nav-toggle" type="button" aria-expanded="false">
+                        <span class="nav-icon"><i class="bi bi-briefcase"></i></span>
+                        <span>Laporan</span>
+                        <i class="bi bi-chevron-down nav-arrow"></i>
+                    </button>
+                    <ul class="nav-submenu">
+                        <li>
+                            <a href="{{ route('laboran.laporan.index') }}" class="nav-subitem {{ request()->routeIs('laboran.laporan.*') ? 'active' : '' }}">
+                                <i class="bi bi-tools"></i><span>Laporan Kerusakan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('laboran.rekap.index') }}" class="nav-subitem {{ request()->routeIs('laboran.rekap.*') ? 'active' : '' }}">
+                                <i class="bi bi-file-earmark-text"></i><span>Rekap Praktikum</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
             @elseif(auth()->user()->role === 'dosen')
@@ -167,8 +181,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-item {{ request()->routeIs('*.laporan.*') ? 'active' : '' }}">
-                        <span class="nav-icon"><i class="bi bi-briefcase"></i></span><span>Laporan</span>
+                    <a href="{{ route('dosen.rekap.index') }}" class="nav-item {{ request()->routeIs('dosen.rekap.*') ? 'active' : '' }}">
+                        <span class="nav-icon"><i class="bi bi-file-earmark-text"></i></span><span>Rekap Praktikum</span>
                     </a>
                 </li>
             @endif

@@ -48,6 +48,7 @@
 
     @auth
         @include('modal-notif')
+        @include('components.islamic-quotes-modal')
     @endauth
 
     <div class="toast" id="toast" role="status"></div>
