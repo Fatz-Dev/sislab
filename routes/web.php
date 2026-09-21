@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     // Profile global
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/photo', [\App\Http\Controllers\ProfileController::class, 'deletePhoto'])->name('profile.photo.delete');
 
     // ── Admin ────────────────────────────────────────────────
     Route::middleware('role:admin')

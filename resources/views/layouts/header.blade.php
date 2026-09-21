@@ -44,7 +44,7 @@
                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                     </div>
                 @endif
-                <span><strong>{{ Auth::user()->name }}</strong><small>{{ ucfirst(Auth::user()->role) }}</small></span>
+                <span><strong>{{ explode(' ', Auth::user()->name)[0] }}</strong><small>{{ ucfirst(Auth::user()->role) }}</small></span>
                 <b aria-hidden="true">⌄</b>
             </button>
             <div class="profile-menu" id="profileMenu" style="top: 100%; right: 0; margin-top: 8px;">

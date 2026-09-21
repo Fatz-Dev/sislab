@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -45,14 +47,19 @@ class ProfileController extends Controller
 
         if ($request->hasFile('photo')) {
             // Delete old photo if exists
-            if ($user->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->photo)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo);
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
             }
             $data['photo'] = $request->file('photo')->store('profile_photos', 'public');
+        } elseif ($request->boolean('delete_photo')) {
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
+            }
+            $data['photo'] = null;
         }
 
         if ($request->filled('password')) {
-            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+            $data['password'] = Hash::make($request->password);
         }
 
         $user->update($data);
@@ -65,5 +72,28 @@ class ProfileController extends Controller
         }
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus foto profil pengguna.
+     */
+    public function deletePhoto(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+            Storage::disk('public')->delete($user->photo);
+        }
+
+        $user->update(['photo' => null]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profil berhasil dihapus.',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Foto profil berhasil dihapus.');
     }
 }

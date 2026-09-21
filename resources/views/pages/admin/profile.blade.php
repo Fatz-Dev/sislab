@@ -8,11 +8,18 @@
         <div class="h-32 bg-gradient-to-r from-green-500 to-emerald-600"></div>
         <div class="px-6 pb-6 relative">
             <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 -mt-12 mb-4">
-                <div class="w-24 h-24 rounded-full border-4 border-white dark:border-[#171d25] bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-400 font-bold text-3xl shadow-md overflow-hidden">
+                <div class="relative group">
+                    <div class="w-24 h-24 rounded-full border-4 border-white dark:border-[#171d25] bg-green-100 dark:bg-green-900 flex items-center justify-center text-green-600 dark:text-green-400 font-bold text-3xl shadow-md overflow-hidden">
+                        @if(Auth::user()->photo)
+                            <img src="{{ asset('storage/'.Auth::user()->photo) }}" alt="Foto" class="w-full h-full object-cover">
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        @endif
+                    </div>
                     @if(Auth::user()->photo)
-                        <img src="{{ asset('storage/'.Auth::user()->photo) }}" alt="Foto" class="w-full h-full object-cover">
-                    @else
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        <button type="button" onclick="openModal('modal-delete-photo')" title="Hapus Foto Profil" class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-[#171d25] transition-transform hover:scale-110 cursor-pointer">
+                            <i class="bi bi-trash3-fill text-xs"></i>
+                        </button>
                     @endif
                 </div>
                 <div class="text-center sm:text-left">
@@ -95,6 +102,20 @@
                     </div>
                     <div>
                         <label for="photo" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Foto Profil Baru (Opsional)</label>
+                        @if(Auth::user()->photo)
+                            <div class="flex items-center justify-between p-2.5 mb-2 bg-slate-50 dark:bg-[#0d1117] rounded-lg border border-slate-200 dark:border-[#344150]">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="{{ asset('storage/'.Auth::user()->photo) }}" alt="Foto Saat Ini" class="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-slate-700">
+                                    <div>
+                                        <p class="text-xs font-semibold text-slate-800 dark:text-white">Foto Profil Saat Ini</p>
+                                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Klik tombol hapus jika ingin menggunakan inisial nama</p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="openModal('modal-delete-photo')" title="Hapus Foto Profil" class="px-2.5 py-1.5 text-xs font-medium text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/50 rounded-lg transition-colors flex items-center gap-1.5">
+                                    <i class="bi bi-trash3-fill"></i> Hapus
+                                </button>
+                            </div>
+                        @endif
                         <input type="file" name="photo" id="photo" accept="image/*" class="w-full text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400">
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Format JPG, PNG maksimal 2MB.</p>
                         <div class="invalid-feedback text-red-500 text-xs mt-1 hidden"></div>
@@ -125,6 +146,30 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Konfirmasi Hapus Foto Profil -->
+<div id="modal-delete-photo" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-[#171d25] rounded-2xl shadow-xl w-full max-w-sm overflow-hidden transform scale-95 transition-transform duration-200 border border-slate-100 dark:border-[#344150]">
+        <div class="p-6 text-center">
+            <div class="w-14 h-14 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="bi bi-trash3-fill"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Hapus Foto Profil?</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                Apakah Anda yakin ingin menghapus foto profil ini? Foto yang dihapus tidak dapat dipulihkan dan avatar Anda akan kembali menggunakan inisial nama.
+            </p>
+            <div class="flex items-center justify-center gap-3">
+                <button type="button" onclick="closeModal('modal-delete-photo')" class="w-1/2 px-4 py-2.5 border border-slate-200 dark:border-[#344150] rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#29323e] font-medium text-sm transition-colors">
+                    Batal
+                </button>
+                <button type="button" id="btn-confirm-delete-photo" onclick="executeDeletePhoto()" class="w-1/2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium text-sm transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <i class="bi bi-trash3"></i>
+                    <span>Ya, Hapus</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -139,6 +184,44 @@
         const modal = document.getElementById(id);
         modal.firstElementChild.classList.add('scale-95');
         setTimeout(() => modal.classList.add('hidden'), 200);
+    }
+
+    function executeDeletePhoto() {
+        const btn = $('#btn-confirm-delete-photo');
+        const originalText = btn.html();
+        btn.prop('disabled', true).html('<i class="bi bi-hourglass-split"></i> Menghapus...');
+
+        $.ajax({
+            url: "{{ route('profile.photo.delete') }}",
+            type: 'DELETE',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            headers: {
+                'Accept': 'application/json'
+            },
+            success: function(response) {
+                closeModal('modal-delete-photo');
+                if (window.showToast) {
+                    window.showToast(response.message);
+                } else {
+                    alert(response.message);
+                }
+                setTimeout(() => window.location.reload(), 800);
+            },
+            error: function(xhr) {
+                btn.prop('disabled', false).html(originalText);
+                let msg = 'Gagal menghapus foto profil.';
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+                if (window.showToast) {
+                    window.showToast(msg);
+                } else {
+                    alert(msg);
+                }
+            }
+        });
     }
 
     $(document).ready(function() {
